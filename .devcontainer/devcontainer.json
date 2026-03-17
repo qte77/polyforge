@@ -36,5 +36,5 @@
     "GH_PAT": "${localEnv:GH_PAT}"
   },
   "onCreateCommand": "bash .devcontainer/clone-repos.sh",
-  "postAttachCommand": "code workspace.code-workspace"
+  "postAttachCommand": "code workspace.code-workspace && bash scripts/cc-repos.sh"
 }
