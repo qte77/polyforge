@@ -34,8 +34,8 @@ PROMPT="${1:?Usage: $0 <prompt>}"
 
 for repo in "${REPOS[@]}"; do
   name=$(basename "$repo")
-  # Derive GitHub org/repo from local path
-  github_repo="qte77/${name}"
+  # Derive GitHub org/repo from git remote
+  github_repo=$(git -C "$repo" remote get-url origin | sed 's#.*github.com[:/]##;s#\.git$##')
 
   echo "Launching cloud session: ${name}"
   claude --remote "${PROMPT}" --repo "github.com/${github_repo}" &
@@ -67,8 +67,9 @@ tmux windows are unnecessary — cloud sessions don't require a terminal. Repurp
 # Monitor cloud sessions instead of launching tmux windows
 for repo in "${REPOS[@]}"; do
   name=$(basename "$repo")
+  github_repo=$(git -C "$repo" remote get-url origin | sed 's#.*github.com[:/]##;s#\.git$##')
   echo "=== ${name} ==="
-  gh pr list --repo "qte77/${name}" --label "claude-code" --limit 3
+  gh pr list --repo "${github_repo}" --label "claude-code" --limit 3
 done
 ```
 
@@ -92,7 +93,7 @@ jobs:
   validate:
     strategy:
       matrix:
-        repo: [Agents-eval, CABIO-test, claude-code-research]
+        repo: [Agents-eval, CABIO-test, coding-agents-research]
     runs-on: ubuntu-latest
     steps:
       - uses: anthropics/claude-code-action@v1
@@ -121,7 +122,8 @@ Results are GitHub PRs. Collect programmatically:
 for repo in "${REPOS[@]}"; do
   name=$(basename "$repo")
   echo "=== ${name} ==="
-  gh pr list --repo "qte77/${name}" --state open --json number,title,createdAt \
+  github_repo=$(git -C "$repo" remote get-url origin | sed 's#.*github.com[:/]##;s#\.git$##')
+  gh pr list --repo "${github_repo}" --state open --json number,title,createdAt \
     --jq '.[] | "\(.number): \(.title) (\(.createdAt))"'
 done
 ```
