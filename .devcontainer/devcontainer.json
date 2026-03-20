@@ -29,7 +29,8 @@
         "dotfiles.repository": "qte77/dotfiles",
         "dotfiles.installCommand": "install.sh",
         "dotfiles.targetPath": "~/dotfiles",
-        "makefile.configureOnOpen": false
+        "makefile.configureOnOpen": false,
+        "task.allowAutomaticTasks": "on"
       }
     }
   },
@@ -37,6 +38,5 @@
     "GH_PAT": "${localEnv:GH_PAT}",
     "WAKATIME_API_KEY": "${localEnv:WAKATIME_API_KEY}"
   },
-  "onCreateCommand": "bash .devcontainer/clone-repos.sh && bash scripts/generate-workspace.sh",
-  "postAttachCommand": "echo '→ Open workspace: Ctrl+Shift+P → Open Workspace from File → workspace.code-workspace'"
+  "onCreateCommand": "bash .devcontainer/clone-repos.sh && bash scripts/generate-workspace.sh"
 }
