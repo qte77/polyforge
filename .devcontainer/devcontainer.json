@@ -46,5 +46,5 @@
     "WAKATIME_API_KEY": "${localEnv:WAKATIME_API_KEY}"
   },
   "onCreateCommand": "bash .devcontainer/clone-repos.sh",
-  "postAttachCommand": "bash scripts/cc-repos.sh"
+  "postAttachCommand": "bash scripts/cc-repos.sh || true"
 }
