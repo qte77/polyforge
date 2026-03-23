@@ -2,7 +2,7 @@
 # Clone all managed repos into the workspace
 # Derives GitHub owner/repo from repos.conf paths — single source of truth
 
-set -euo pipefail
+set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../scripts/repos.conf"
