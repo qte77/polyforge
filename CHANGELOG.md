@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `scripts/repos.conf`: dynamic `POLYFORGE_ROOT` detection (works at any checkout path)
-- `workspace.code-workspace` is now generated (added to `.gitignore`)
+- `workspace.code-workspace` tracked in git (Codespaces auto-detects for multi-root sidebar)
 - `onCreateCommand` uses `;` separators (each step runs independently)
 - `cc-repos.sh`: creates detached session only (no `tmux attach` — `.bashrc` handles it)
 
