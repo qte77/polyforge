@@ -5,29 +5,25 @@
 #
 # Options:
 #   --max-turns N      Max conversation turns per repo (default: 10)
-#   --max-budget N     Max USD budget per repo (default: 2.0)
 #   --output-dir DIR   Directory for result files (default: mktemp)
 #   --preset NAME      Use a predefined prompt+repo combination
 #
 # Presets:
 #   validate    — Run `make validate` on all repos that have a Makefile
-#   status      — Report git status and recent changes
 #   security    — Audit for security issues
 #
 # Examples:
 #   ./cc-parallel.sh "Run make validate" /workspaces/Agents-eval /workspaces/qte77/RAPID-spec-forge
 #   ./cc-parallel.sh --preset validate
-#   ./cc-parallel.sh --max-budget 1.0 "Check for TODO comments" /workspaces/Agents-eval
+#   ./cc-parallel.sh "Check for TODO comments" /workspaces/Agents-eval
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/../config/env-loader.sh"
-source "${SCRIPT_DIR}/repos.conf"
+source "${SCRIPT_DIR}/workspace-repos.sh"
 
 # Defaults
 MAX_TURNS=10
-MAX_BUDGET="2.0"
 OUTPUT_DIR=""
 PROMPT=""
 PRESET=""
@@ -42,7 +38,6 @@ usage() {
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --max-turns) MAX_TURNS="$2"; shift 2 ;;
-    --max-budget) MAX_BUDGET="$2"; shift 2 ;;
     --output-dir) OUTPUT_DIR="$2"; shift 2 ;;
     --preset) PRESET="$2"; shift 2 ;;
     --help|-h) usage ;;
@@ -68,12 +63,6 @@ case "$PRESET" in
     for repo in "${REPOS[@]}"; do
       [[ -f "$repo/Makefile" ]] && TARGET_REPOS+=("$repo")
     done
-    ;;
-  status)
-    PROMPT="Report: 1) current branch, 2) git status (clean/dirty), 3) last 3 commit subjects, 4) any uncommitted changes summary."
-    TARGET_REPOS=("${REPOS[@]}")
-    MAX_TURNS=3
-    MAX_BUDGET="0.50"
     ;;
   security)
     PROMPT="Audit this repo for security issues: hardcoded secrets, insecure dependencies, OWASP top 10 vulnerabilities. Report findings with severity (critical/high/medium/low) and file locations."
@@ -109,7 +98,6 @@ echo "=== CC Parallel Runner ==="
 echo "Prompt:     ${PROMPT:0:80}$([ ${#PROMPT} -gt 80 ] && echo '...')"
 echo "Repos:      ${#TARGET_REPOS[@]}"
 echo "Max turns:  $MAX_TURNS"
-echo "Max budget: \$${MAX_BUDGET}/repo"
 echo "Output:     $OUTPUT_DIR"
 echo ""
 

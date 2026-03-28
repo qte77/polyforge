@@ -7,13 +7,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/repos.conf"
+source "${SCRIPT_DIR}/workspace-repos.sh"
 
 VERBOSE="${1:-}"
 
 # Header
-printf "%-28s %-20s %-7s %-8s %s\n" "REPO" "BRANCH" "STATUS" "RALPH" "LAST COMMIT"
-printf "%-28s %-20s %-7s %-8s %s\n" "----" "------" "------" "-----" "-----------"
+printf "%-28s %-20s %-7s %s\n" "REPO" "BRANCH" "STATUS" "LAST COMMIT"
+printf "%-28s %-20s %-7s %s\n" "----" "------" "------" "-----------"
 
 for repo in "${REPOS[@]}"; do
   if [[ ! -d "$repo/.git" ]]; then
@@ -34,18 +34,10 @@ for repo in "${REPOS[@]}"; do
     status="${changed}m"
   fi
 
-  # Ralph state
-  ralph_state="-"
-  if [[ -f "$repo/ralph/docs/prd.json" ]]; then
-    total=$(jq -r '[.stories[]] | length' "$repo/ralph/docs/prd.json" 2>/dev/null || echo "?")
-    completed=$(jq -r '[.stories[] | select(.status == "done")] | length' "$repo/ralph/docs/prd.json" 2>/dev/null || echo "?")
-    ralph_state="${completed}/${total}"
-  fi
-
   # Last commit
   last_commit=$(git -C "$repo" log -1 --format='%ar: %s' 2>/dev/null | head -c 70)
 
-  printf "%-28s %-20s %-7s %-8s %s\n" "$name" "$branch" "$status" "$ralph_state" "$last_commit"
+  printf "%-28s %-20s %-7s %s\n" "$name" "$branch" "$status" "$last_commit"
 
   # Verbose: show uncommitted files
   if [[ "$VERBOSE" == "--verbose" && "$status" != "clean" ]]; then
@@ -55,9 +47,3 @@ for repo in "${REPOS[@]}"; do
 done
 
 echo ""
-
-# Submodule status for Agents-eval
-if [[ -f /workspaces/Agents-eval/.gitmodules ]]; then
-  echo "=== Submodule Status ==="
-  git -C /workspaces/Agents-eval submodule status 2>/dev/null | sed 's/^/ /'
-fi
