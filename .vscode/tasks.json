@@ -5,7 +5,7 @@
         "label": "Agents-eval",
         "type": "shell",
         "command": "exec $SHELL",
-        "options": { "cwd": "/workspaces/Agents-eval" },
+        "options": { "cwd": "/workspaces/qte77/Agents-eval" },
         "runOptions": { "runOn": "folderOpen" },
         "presentation": { "group": "repos", "reveal": "always" },
         "problemMatcher": []
@@ -60,6 +60,15 @@
         "type": "shell",
         "command": "exec $SHELL",
         "options": { "cwd": "/workspaces/qte77/polyforge" },
+        "runOptions": { "runOn": "folderOpen" },
+        "presentation": { "group": "repos", "reveal": "always" },
+        "problemMatcher": []
+      },
+      {
+        "label": "dotfiles",
+        "type": "shell",
+        "command": "exec $SHELL",
+        "options": { "cwd": "/workspaces/qte77/dotfiles" },
         "runOptions": { "runOn": "folderOpen" },
         "presentation": { "group": "repos", "reveal": "always" },
         "problemMatcher": []
