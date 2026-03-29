@@ -1,18 +1,18 @@
-
 .SILENT:
 .ONESHELL:
 .PHONY: \
-
-	help update
+	help setup_all setup_vscode setup_gh_auth setup_claude_code \
+	setup_claude_sandbox setup_rtk setup_npm_tools setup_lychee \
+	generate_tasks clone_repos
 .DEFAULT_GOAL := help
-
-setup_all: \
-	setup_gh_auth clone_repos setup_claude_code setup_claude_sandbox \
-	setup_npm_tools setup_lychee setup_rtk generate
 
 
 # MARK: SETUP
 
+
+setup_all: \  ## Run all setup targets
+	setup_gh_auth clone_repos setup_claude_code setup_claude_sandbox \
+	setup_npm_tools setup_lychee setup_rtk generate_tasks start_workspace
 
 setup_gh_auth:  ## Configure gh as git credential helper (uses GH_TOKEN from containerEnv)
 	gh auth setup-git
@@ -44,12 +44,11 @@ setup_claude_sandbox:  ## Install sandbox deps (bubblewrap, socat) for Linux/WSL
 	echo "Sandbox dependencies installed."
 
 
-setup_rtk:  ## Install RTK CLI for token-optimized LLM output (run outside CC session)
+setup_rtk:  ## Install RTK CLI for token-optimized LLM output
 	if command -v rtk > /dev/null 2>&1; then echo "rtk already installed: $$(rtk --version)"; \
-	else curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh; fi
+	else GITHUB_TOKEN= GH_TOKEN= curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | GITHUB_TOKEN= GH_TOKEN= sh; fi
 	rtk init -g --auto-patch
 
-# TODO: evaluate Python-native alternatives (pymarkdownlnt, mdformat, pylint R0801) to reduce npm dependency
 setup_npm_tools:  ## Setup npm-based dev tools (markdownlint, jscpd). Requires node.js and npm
 	echo "Setting up npm dev tools ..."
 	npm install -gs markdownlint-cli jscpd
@@ -62,24 +61,27 @@ setup_lychee:  ## Install lychee link checker (Rust binary, requires sudo)
 	echo "lychee version: $$(lychee --version)"
 
 
-# MARK: GENERATE
+# MARK: VSCODE
 
 
-generate:  ## Generate .vscode/tasks.json from workspace.code-workspace
-	bash scripts/generate-tasks.sh
-
+start_workspace:  ## Open workspace in VS Code (requires code CLI)
+	if command -v code > /dev/null 2>&1; then code workspace.code-workspace; \
+	else echo "code CLI not found. Install VS Code or use code-insiders."; fi
 
 clone_repos:  ## Clone all managed repos from workspace.code-workspace
 	bash scripts/clone-repos.sh
+
+generate_tasks:  ## Generate VS Code tasks from workspace repos
+	bash scripts/generate_tasks-tasks.sh
 
 
 # MARK: HELP
 
 
 help:  ## Show available recipes grouped by section
-	@echo "Usage: make [recipe]"
-	@echo ""
-	@awk '/^# MARK:/ { \
+	echo "Usage: make [recipe]"
+	echo ""
+	awk '/^# MARK:/ { \
 		section = substr($$0, index($$0, ":")+2); \
 		printf "\n\033[1m%s\033[0m\n", section \
 	} \
