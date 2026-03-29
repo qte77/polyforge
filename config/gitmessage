@@ -30,9 +30,9 @@
 #<--- usage ----------------------------------------------------------->
 #
 # Set locally (in the repository)
-# `git config commit.template .gitmessage`
+# `git config commit.template config/gitmessage`
 #
 # Set globally
-# `git config --global commit.template .gitmessage`
+# `git config --global commit.template config/gitmessage`
 #
 #<--- 72 characters --------------------------------------------------->
