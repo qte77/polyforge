@@ -28,18 +28,12 @@ to validate all repos in one command.
 ./scripts/cc-status.sh
 ```
 
-## Configuration
-
-Edit `workspace.code-workspace` to add/remove repos.
-All scripts read from this single file.
-
-Credentials: `GH_PAT` Codespace secret, mapped to
-`GH_TOKEN` via `containerEnv`. `make setup_all` runs
-`gh auth setup-git` so git uses `gh` for auth.
-See `docs/cross-repo-setup.md` for details and fallbacks.
+Repos: edit `workspace.code-workspace`. Credentials:
+set `GH_PAT` as Codespace secret.
 
 ## Docs
 
-- `docs/cc-web-cloud-workflows.md` — Cloud execution
-- `docs/cross-repo-setup.md` — CC multi-repo settings
-- `docs/sandbox-friction.md` — Sandbox mitigations
+- [Codespaces](docs/codespaces.md) — rebuild, secrets, management
+- [Cross-repo setup](docs/cross-repo-setup.md) — auth, sandbox, settings
+- [Cloud workflows](docs/cc-web-cloud-workflows.md) — remote execution
+- [Sandbox friction](docs/sandbox-friction.md) — known issues, mitigations

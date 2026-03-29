@@ -57,6 +57,18 @@ unset GITHUB_TOKEN && gh auth login --with-token <<< "$GH_PAT"
 gh auth setup-git
 ```
 
-Note: `GITHUB_TOKEN` is auto-injected by Codespaces.
-`GH_TOKEN` takes precedence in `gh` CLI, which is why
-`containerEnv` maps `GH_PAT` to `GH_TOKEN`.
+### Token precedence and storage
+
+`gh` CLI resolves auth in this order:
+1. `GH_TOKEN` env var (highest)
+2. `GITHUB_TOKEN` env var
+3. Stored credentials in `~/.config/gh/hosts.yml`
+
+`gh auth login` and `gh auth setup-git` persist the
+token to `~/.config/gh/hosts.yml`. This file is the
+credential store for both `gh` commands and `git`
+operations when `gh` is configured as credential helper.
+
+`GITHUB_TOKEN` is auto-injected by Codespaces.
+`GH_TOKEN` takes precedence, which is why `containerEnv`
+maps `GH_PAT` to `GH_TOKEN`.
