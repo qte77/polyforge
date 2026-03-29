@@ -66,9 +66,14 @@ setup_lychee:  ## Install lychee link checker (Rust binary, requires sudo)
 
 
 start_workspace:  ## Open workspace in VS Code (requires code CLI)
-	code_user="~/.config/Code/User"
-	mkdir -p $$code_user
-	cp -n .vscode/keybindings.json "$${code_user}/keybindings.json" 2>/dev/null || true
+	code_user="$$HOME/.config/Code/User"
+	mkdir -p "$$code_user"
+	if command -v jq > /dev/null 2>&1 && [ -f "$$code_user/keybindings.json" ]; then \
+		jq -s 'add | unique_by(.command)' "$$code_user/keybindings.json" .vscode/keybindings.json \
+			> "$$code_user/keybindings.tmp" && mv "$$code_user/keybindings.tmp" "$$code_user/keybindings.json"; \
+	else \
+		cp -n .vscode/keybindings.json "$$code_user/keybindings.json" 2>/dev/null || true; \
+	fi
 # 	if command -v code > /dev/null 2>&1; then code workspace.code-workspace; \
 # 	else echo "code CLI not found. Install VS Code or use code-insiders."; fi
 
