@@ -5,7 +5,7 @@
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/workspace-repos.sh"
+source "${SCRIPT_DIR}/load-workspace-repos.sh"
 
 # Default GitHub org (override via GITHUB_ORG env var)
 ORG="${GITHUB_ORG:-qte77}"

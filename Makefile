@@ -10,12 +10,13 @@
 # MARK: SETUP
 
 
-setup_all: \  ## Run all setup targets
+setup_all: \
 	setup_gh_auth clone_repos setup_claude_code setup_claude_sandbox \
 	setup_npm_tools setup_lychee setup_rtk generate_tasks start_workspace
 
 setup_gh_auth:  ## Configure gh as git credential helper (uses GH_TOKEN from containerEnv)
-	gh auth setup-git
+	if command -v gh > /dev/null 2>&1; then gh auth setup-git; \
+	else echo "gh cli not installed. skipping auth."; fi
 
 setup_claude_code:  ## Setup claude code CLI
 	echo "Setting up Claude Code CLI ..."
@@ -65,14 +66,19 @@ setup_lychee:  ## Install lychee link checker (Rust binary, requires sudo)
 
 
 start_workspace:  ## Open workspace in VS Code (requires code CLI)
-	if command -v code > /dev/null 2>&1; then code workspace.code-workspace; \
-	else echo "code CLI not found. Install VS Code or use code-insiders."; fi
+	code_user="~/.config/Code/User"
+	mkdir -p $$code_user
+	cp -n .vscode/keybindings.json "$${code_user}/keybindings.json" 2>/dev/null || true
+# 	if command -v code > /dev/null 2>&1; then code workspace.code-workspace; \
+# 	else echo "code CLI not found. Install VS Code or use code-insiders."; fi
 
 clone_repos:  ## Clone all managed repos from workspace.code-workspace
+	echo "Cloning repos..."
 	bash scripts/clone-repos.sh
 
 generate_tasks:  ## Generate VS Code tasks from workspace repos
-	bash scripts/generate_tasks-tasks.sh
+	echo "Generating vscode tasks..."
+	bash scripts/generate-tasks.sh
 
 
 # MARK: HELP

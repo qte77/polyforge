@@ -1,6 +1,6 @@
 #!/bin/bash
 # Load REPOS and REPO_NAMES arrays from workspace.code-workspace
-# Usage: source scripts/workspace-repos.sh
+# Usage: source scripts/load-workspace-repos.sh
 
 POLYFORGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WORKSPACE_FILE="${POLYFORGE_ROOT}/workspace.code-workspace"

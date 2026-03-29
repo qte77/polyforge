@@ -7,7 +7,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/workspace-repos.sh"
+source "${SCRIPT_DIR}/load-workspace-repos.sh"
 
 TASKS_FILE="${POLYFORGE_ROOT}/.vscode/tasks.json"
 mkdir -p "$(dirname "$TASKS_FILE")"
