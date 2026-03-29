@@ -1,5 +1,0 @@
-{
-  "key": "ctrl+space; ctrl+space",
-  "command": "workbench.action.toggleMaximizedPanel",
-  "when": ""
-}

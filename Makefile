@@ -64,15 +64,7 @@ setup_lychee:  ## Install lychee link checker (Rust binary, requires sudo)
 # MARK: VSCODE
 
 
-start_workspace:  ## Open workspace in current VS Code window and merge keybindings
-	code_user="$$HOME/.config/Code/User"
-	mkdir -p "$$code_user"
-	if command -v jq > /dev/null 2>&1 && [ -f "$$code_user/keybindings.json" ]; then \
-		jq -s 'add | unique_by(.command)' "$$code_user/keybindings.json" config/keybindings.json \
-			> "$$code_user/keybindings.tmp" && mv "$$code_user/keybindings.tmp" "$$code_user/keybindings.json"; \
-	else \
-		cp -n config/keybindings.json "$$code_user/keybindings.json" 2>/dev/null || true; \
-	fi
+start_workspace:  ## Open workspace in current VS Code window
 	if command -v code > /dev/null 2>&1; then code -r workspace.code-workspace; fi
 
 clone_repos:  ## Clone all managed repos from config/repos.conf
