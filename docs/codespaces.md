@@ -5,8 +5,9 @@
 After changing `devcontainer.json`, rebuild to apply:
 
 ```bash
-gh codespace rebuild
-gh codespace rebuild --full  # clean rebuild (no cache)
+gh codespace rebuild                # rebuild current
+gh codespace rebuild --full         # clean rebuild (no cache)
+gh codespace rebuild -c <name>      # rebuild specific codespace
 ```
 
 Or via VS Code command palette:
@@ -17,12 +18,15 @@ local devcontainers, not Codespaces.
 
 ## Management
 
+Manage any Codespace from within polyforge using `-c`:
+
 ```bash
 gh codespace list
-gh codespace stop
-gh codespace delete
-gh codespace ssh
-gh codespace logs
+gh codespace stop  -c <name>
+gh codespace start -c <name>    # (re-)start a stopped codespace
+gh codespace ssh   -c <name>
+gh codespace delete -c <name>
+gh codespace logs  -c <name>
 ```
 
 ## Secrets
@@ -45,6 +49,22 @@ Secrets are injected as env vars. Map them in
 ```
 
 See `docs/cross-repo-setup.md` for auth details.
+
+## Token scopes
+
+The Codespaces-injected `GITHUB_TOKEN` and fine-grained
+PATs (`GH_PAT`) have different scope coverage:
+
+| Operation | `GITHUB_TOKEN` | `GH_PAT` (fine-grained) |
+|-----------|:-:|:-:|
+| `gh codespace list/rebuild/stop` | Yes | Needs `codespace` scope |
+| `gh pr create` | No | Needs `pull_requests:write` |
+| `git push` | Scoped to current repo | Needs `contents:write` |
+| `git push` (protected branch) | No | Needs `administration:write` |
+
+Set `GH_PAT` scopes to cover `gh` and `git` operations.
+Codespace management (`rebuild`, `stop`, etc.) uses the
+default `GITHUB_TOKEN` unless `GH_PAT` includes `codespace`.
 
 ## Ports and Forwarding
 
