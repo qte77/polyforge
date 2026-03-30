@@ -1,7 +1,7 @@
 #!/bin/bash
-# Generate workspace.code-workspace and .vscode/tasks.json from config/repos.conf (SOT)
-# workspace.code-workspace: folder list only
-# .vscode/tasks.json: terminal tasks with runOn: folderOpen, group: repos (split terminals)
+# Generate workspace.code-workspace from config/repos.conf (SOT)
+# Includes folders + terminal tasks with runOn: folderOpen
+# "group": "repos" = side-by-side split terminals
 
 set -euo pipefail
 
@@ -9,9 +9,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/load-workspace-repos.sh"
 
 WORKSPACE_FILE="${POLYFORGE_ROOT}/workspace.code-workspace"
-TASKS_FILE="${POLYFORGE_ROOT}/.vscode/tasks.json"
-
-mkdir -p "${POLYFORGE_ROOT}/.vscode"
 
 # Build folders array — polyforge + relative paths from gh_repo entries
 folders='[{"path": ".", "name": "polyforge"}]'
@@ -21,9 +18,6 @@ for i in "${!GH_REPOS[@]}"; do
     --arg n "${REPO_NAMES[$((i+1))]}" \
     '. + [{"path": $p, "name": $n}]')
 done
-
-# Write workspace file (folders only)
-jq -n --argjson folders "$folders" '{folders: $folders}' > "$WORKSPACE_FILE"
 
 # Build tasks array with resolved absolute paths
 tasks="[]"
@@ -42,8 +36,11 @@ for i in "${!REPOS[@]}"; do
     }]')
 done
 
-# Write tasks file
-jq -n --argjson tasks "$tasks" '{version: "2.0.0", tasks: $tasks}' > "$TASKS_FILE"
+# Write workspace file (folders + tasks)
+jq -n \
+  --argjson folders "$folders" \
+  --argjson tasks "$tasks" \
+  '{folders: $folders, tasks: {version: "2.0.0", tasks: $tasks}}' \
+  > "$WORKSPACE_FILE"
 
-echo "Generated $WORKSPACE_FILE with ${#REPOS[@]} folders"
-echo "Generated $TASKS_FILE with ${#REPOS[@]} tasks"
+echo "Generated $WORKSPACE_FILE with ${#REPOS[@]} repos and tasks"
