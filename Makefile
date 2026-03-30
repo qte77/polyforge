@@ -76,8 +76,11 @@ setup_lychee:  ## Install lychee link checker (Rust binary, requires sudo)
 # MARK: VSCODE
 
 
-start_workspace:  ## Open workspace in current VS Code window
-	if command -v code > /dev/null 2>&1; then code -r workspace.code-workspace; fi
+start_workspace:  ## Open workspace in current VS Code window (once per session)
+	$(_src_colors)
+	if [[ -f /tmp/.workspace-opened ]]; then info "Workspace already opened, skipping"; \
+	elif ! command -v code > /dev/null 2>&1; then warn "code CLI not available"; \
+	else touch /tmp/.workspace-opened && code -r workspace.code-workspace && success "Workspace opened"; fi
 
 clone_repos:  ## Clone all managed repos from config/repos.conf
 	$(_src_colors)
