@@ -1,6 +1,7 @@
 .env
 *.log
 workspace.code-workspace
+.vscode/
 
 # CC runtime artifacts (deployed by plugin + dotfiles)
 .claude/
