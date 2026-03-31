@@ -12,13 +12,23 @@ define _src_colors
 source scripts/colors.sh
 endef
 
+# Pinned known-good versions (fallback when latest fails)
+RTK_VERSION := 0.34.1
+LYCHEE_VERSION := 0.23.0
+MARKDOWNLINT_VERSION := 0.48.0
+JSCPD_VERSION := 4.0.8
+
 
 # MARK: SETUP
 
 
-setup_all: \
-	setup_gh_auth clone_repos setup_claude_code setup_claude_sandbox \
-	setup_npm_tools setup_lychee setup_rtk generate_tasks
+setup_all:  ## Run all setup steps (non-fatal: failures warn, don't abort)
+	$(_src_colors)
+	for target in setup_gh_auth clone_repos setup_claude_code setup_claude_sandbox \
+		setup_npm_tools setup_lychee setup_rtk generate_tasks; do \
+		$(MAKE) $$target || warn "$$target failed, continuing..."; \
+	done
+	success "Setup complete"
 
 setup_gh_auth:  ## Configure gh as git credential helper (uses GH_TOKEN from containerEnv)
 	$(_src_colors)
@@ -27,10 +37,13 @@ setup_gh_auth:  ## Configure gh as git credential helper (uses GH_TOKEN from con
 
 setup_claude_code:  ## Setup claude code CLI
 	$(_src_colors)
-	info "Setting up Claude Code CLI ..."
 	if command -v claude > /dev/null 2>&1; then info "claude already installed: $$(claude --version)"; \
-	else curl -fsSL https://claude.ai/install.sh | bash; fi
-	success "Claude Code CLI version: $$(claude --version)"
+	else \
+		info "Installing Claude Code CLI..."; \
+		curl -fsSL https://claude.ai/install.sh | bash \
+		|| warn "claude install failed, skipping"; \
+	fi
+	command -v claude > /dev/null 2>&1 && success "Claude Code CLI version: $$(claude --version)" || true
 
 setup_claude_sandbox:  ## Install sandbox deps (bubblewrap, socat) for Linux/WSL2
 	# Required for Claude Code sandboxing on Linux/WSL2:
@@ -56,21 +69,34 @@ setup_claude_sandbox:  ## Install sandbox deps (bubblewrap, socat) for Linux/WSL
 setup_rtk:  ## Install RTK CLI for token-optimized LLM output
 	$(_src_colors)
 	if command -v rtk > /dev/null 2>&1; then info "rtk already installed: $$(rtk --version)"; \
-	else GITHUB_TOKEN= GH_TOKEN= curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | GITHUB_TOKEN= GH_TOKEN= sh; fi
-	rtk init -g --auto-patch
+	else \
+		info "Installing rtk (trying latest, fallback to v$(RTK_VERSION))..."; \
+		GITHUB_TOKEN= GH_TOKEN= curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | GITHUB_TOKEN= GH_TOKEN= sh \
+		|| GITHUB_TOKEN= GH_TOKEN= curl -fsSL "https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh" | GITHUB_TOKEN= GH_TOKEN= RTK_VERSION=$(RTK_VERSION) sh \
+		|| warn "rtk install failed, skipping"; \
+	fi
+	command -v rtk > /dev/null 2>&1 && rtk init -g --auto-patch || true
 
 setup_npm_tools:  ## Setup npm-based dev tools (markdownlint, jscpd). Requires node.js and npm
 	$(_src_colors)
 	info "Setting up npm dev tools ..."
-	npm install -gs markdownlint-cli jscpd
-	success "markdownlint version: $$(markdownlint --version)"
-	success "jscpd version: $$(jscpd --version)"
+	npm install -gs markdownlint-cli jscpd \
+		|| (warn "latest npm install failed, trying pinned versions..." && \
+			npm install -gs markdownlint-cli@$(MARKDOWNLINT_VERSION) jscpd@$(JSCPD_VERSION)) \
+		|| warn "npm tools install failed, skipping"
+	command -v markdownlint > /dev/null 2>&1 && success "markdownlint version: $$(markdownlint --version)" || true
+	command -v jscpd > /dev/null 2>&1 && success "jscpd version: $$(jscpd --version)" || true
 
 setup_lychee:  ## Install lychee link checker (Rust binary, requires sudo)
 	$(_src_colors)
 	if command -v lychee > /dev/null 2>&1; then info "lychee already installed: $$(lychee --version)"; \
-	else curl -sL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz | sudo tar xz -C /usr/local/bin lychee; fi
-	success "lychee version: $$(lychee --version)"
+	else \
+		info "Installing lychee (trying latest, fallback to v$(LYCHEE_VERSION))..."; \
+		curl -sL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz | sudo tar xz -C /usr/local/bin lychee \
+		|| curl -sL "https://github.com/lycheeverse/lychee/releases/download/lychee-v$(LYCHEE_VERSION)/lychee-x86_64-unknown-linux-gnu.tar.gz" | sudo tar xz -C /usr/local/bin lychee \
+		|| warn "lychee install failed, skipping"; \
+	fi
+	command -v lychee > /dev/null 2>&1 && success "lychee version: $$(lychee --version)" || true
 
 
 # MARK: VSCODE
