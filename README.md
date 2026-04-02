@@ -30,16 +30,18 @@ set `GH_PAT` as Codespace secret.
 
 ## How It Works
 
-On codespace creation (`make setup_all`), polyforge installs
-shared tooling (Claude Code, RTK, lychee, markdownlint),
-clones all repos from `config/repos.conf`, and generates
-`workspace.code-workspace` with terminal tasks per repo.
+On codespace creation (`make setup_all`), polyforge:
 
-On attach (`make setup_repos`), it reads each repo's
-`devcontainer.json` and runs their `onCreateCommand` +
-`postCreateCommand` inside the host container — bridging
-the gap where multi-root workspaces only run the host
-container's devcontainer lifecycle.
+1. Configures git auth and clones all repos from `config/repos.conf`
+2. Deploys dotfiles (symlinks `~/.claude` to `/workspaces/.claude-files` for rebuild persistence)
+3. Installs shared tooling (Claude Code, RTK, lychee, markdownlint)
+4. Generates `workspace.code-workspace` with terminal tasks per repo
+
+On attach (`make setup_repos setup_dotfiles start_workspace`):
+
+1. Runs each repo's `devcontainer.json` lifecycle commands in the host container
+2. Re-deploys dotfiles (covers timing races with VS Code's dotfiles extension)
+3. Opens the generated workspace file
 
 Terminal tasks auto-open via `runOn: folderOpen` in both
 VS Code Desktop and Web.
