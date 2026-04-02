@@ -132,10 +132,12 @@ setup_repos:  ## Run each repo's devcontainer setup commands (uv, npm, etc.)
 # MARK: VSCODE
 
 
-start_workspace:  ## Open workspace in current VS Code window (manual use only)
+start_workspace:  ## Open workspace in current VS Code window (once per container lifetime)
 	$(_src_colors)
-	if command -v code > /dev/null 2>&1; then code -r workspace.code-workspace && success "Workspace opened"; \
-	else warn "code CLI not available"; fi
+	if [ ! -f /tmp/.workspace-opened ] && command -v code > /dev/null 2>&1; then \
+		code -r workspace.code-workspace && touch /tmp/.workspace-opened \
+		&& success "Workspace opened"; \
+	fi
 
 clone_repos:  ## Clone all managed repos from config/repos.conf
 	$(_src_colors)
