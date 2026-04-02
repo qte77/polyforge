@@ -2,9 +2,9 @@
 .ONESHELL:
 SHELL := /bin/bash
 .PHONY: \
-	help setup_all setup_repos setup_vscode setup_gh_auth setup_claude_code \
+	help setup_all setup_repos setup_dotfiles setup_gh_auth setup_claude_code \
 	setup_claude_sandbox setup_rtk setup_npm_tools setup_lychee \
-	generate_tasks clone_repos
+	generate_tasks clone_repos start_workspace
 .DEFAULT_GOAL := help
 
 # Source colors for all recipes
@@ -24,8 +24,8 @@ JSCPD_VERSION := 4.0.8
 
 setup_all:  ## Run all setup steps (non-fatal: failures warn, don't abort)
 	$(_src_colors)
-	for target in setup_gh_auth clone_repos setup_claude_code setup_claude_sandbox \
-		setup_npm_tools setup_lychee setup_rtk generate_tasks; do \
+	for target in setup_gh_auth clone_repos setup_dotfiles setup_claude_code \
+		setup_claude_sandbox setup_rtk setup_npm_tools setup_lychee generate_tasks; do \
 		$(MAKE) $$target || warn "$$target failed, continuing..."; \
 	done
 	success "Setup complete"
@@ -34,6 +34,13 @@ setup_gh_auth:  ## Configure gh as git credential helper (uses GH_TOKEN from con
 	$(_src_colors)
 	if command -v gh > /dev/null 2>&1; then gh auth setup-git; \
 	else warn "gh cli not installed. skipping auth."; fi
+
+setup_dotfiles:  ## Deploy dotfiles symlinks (idempotent, safe to re-run)
+	$(_src_colors)
+	DOTFILES="/workspaces/qte77/dotfiles/install.sh"
+	if [[ -x "$$DOTFILES" ]]; then info "Deploying dotfiles..."; "$$DOTFILES" \
+		&& success "Dotfiles deployed" || warn "dotfiles install failed, continuing"; \
+	else warn "dotfiles install.sh not found, skipping"; fi
 
 setup_claude_code:  ## Setup claude code CLI
 	$(_src_colors)
