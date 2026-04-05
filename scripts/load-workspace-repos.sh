@@ -15,10 +15,12 @@ fi
 REPOS=("$POLYFORGE_ROOT")
 REPO_NAMES=("polyforge")
 GH_REPOS=()
+FORK_FLAGS=()
 
-while IFS=: read -r gh_repo name; do
+while IFS=: read -r gh_repo name fork_flag; do
   [[ -z "$gh_repo" || "$gh_repo" == \#* ]] && continue
   REPOS+=("$(realpath -m "$POLYFORGE_ROOT/../$gh_repo")")
   REPO_NAMES+=("$name")
   GH_REPOS+=("$gh_repo")
+  FORK_FLAGS+=("${fork_flag:-}")
 done < "$REPOS_CONF"
