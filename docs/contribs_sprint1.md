@@ -103,14 +103,14 @@ WEEK 3 — Strategic
 
 ### BayramAnnakov/claude-reflect
 
-- [x] #25 — pytest not found in CI (quick win, DOING NOW)
+- [ ] #25 — pytest not found in CI (quick win, planned)
 - [ ] Review + improve PR #26 — CLAUDE_PLUGIN_ROOT fallback (fixes #17)
 - [ ] PR #27 — SessionEnd hook (stalled 3 weeks, revive + add tests)
 - [ ] Multi-project reflection aggregation — reflect across repos not just one (strategic)
 
 ### SWE-bench/SWE-bench
 
-- [x] #472 — clarify eval output JSON docs (quick win, DOING NOW)
+- [ ] #472 — clarify eval output JSON docs (quick win, planned)
 - [ ] #474 — check_fail_only evaluates fatal errors as resolved (bug fix, no competing PR)
 - [ ] #410 — clarify patch_is_None vs patch_exists (docs)
 - [ ] #502 — missing django-7530 test case (dataset fix)
@@ -132,6 +132,50 @@ Demoted — solo maintainer ignores external PRs for months.
 Demoted — Google CLA + 20 stalled external PRs.
 
 - [ ] #2696 — `||` vs `??` for header/footer (one-line fix, if CLA signed)
+
+### CraftsMan-Labs/SimpleAgents
+
+- [ ] Add PR template (low-hanging, builds trust)
+- [ ] #23 — cyclomatic complexity CI setup (quick win)
+- [ ] #42 — human-in-the-loop approval system (high value, Rust)
+- [ ] #44 — agentic skills for CC/codex/opencode (strategic, CC skills interop)
+
+### richlira/compass-mcp
+
+- [ ] Tests + CI (vitest + GHA pipeline, founding contributor)
+- [ ] `list_contexts` tool (obvious missing feature)
+- [ ] Agent identity + multi-workspace (strategic, office-forge coordination)
+
+### Gitlawb/openclaude
+
+- [ ] #448 — status line always 0% (small focused fix)
+- [ ] #433 — Ollama tool calling outputs raw JSON (provider bug)
+- [ ] #430 — tool call validation strict mode (provider bug)
+- [ ] Review/champion auriti PRs #268/#258 (strip Anthropic params from 3P)
+
+### patent-dev/epo-ops
+
+- [ ] #2 — XML parsing bug (well-documented, proposed fix exists)
+- [ ] #1 — Go module proxy cache (needs version bump)
+- [ ] Add CONTRIBUTING.md + PR template
+
+### patent-dev (cross-repo: bulk-file-loader, uspto-odp, dpma-connect-plus, epo-bdds)
+
+- [ ] Add test suites across all 4 repos
+- [ ] Add CONTRIBUTING.md + CI workflows
+- [ ] Cross-library consistency audit
+
+### patoles/agent-flow
+
+- [ ] SSE visualization bugs (#35)
+- [ ] Subagent rendering (#31)
+- [ ] Polyrepo topology visualization (strategic)
+
+### sangrokjung/claude-forge
+
+- [ ] Marketplace schema bugs (#19)
+- [ ] Hook naming/path failures (#15)
+- [ ] Port cc-utils-plugin skills as forge plugins
 
 ## Workflow
 
