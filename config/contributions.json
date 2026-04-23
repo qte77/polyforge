@@ -1,7 +1,7 @@
 {
   "$schema": "contributions.schema.json",
   "version": "1.0.0",
-  "updated": "2026-04-13T00:00:00Z",
+  "updated": "2026-04-14T00:00:00Z",
   "plans": {
     "workspace-audit-apr7-13": {
       "source": "~/.claude/plans/workspace-activity-audit-apr7-13.md",
@@ -53,15 +53,15 @@
     }
   },
   "repos": {
-    "cc-plugins": {
+    "qte77/claude-code-plugins": {
       "tasks": [
-        { "id": "audit-1a-1", "plan": "workspace-audit-apr7-13", "action": "commit simplify removal branch", "status": "pending", "issue": null, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null },
-        { "id": "audit-1a-2", "plan": "workspace-audit-apr7-13", "action": "merge PR #117 statusline path fix", "status": "pending", "issue": null, "pr": 117, "depends_on": [], "last_run": null, "cost_usd": null, "error": null },
-        { "id": "audit-1a-3", "plan": "workspace-audit-apr7-13", "action": "delete stale feat/rag-core branch", "status": "pending", "issue": null, "pr": null, "depends_on": ["audit-1a-1"], "last_run": null, "cost_usd": null, "error": null },
-        { "id": "audit-1a-4", "plan": "workspace-audit-apr7-13", "action": "drop 7 stale stash entries", "status": "pending", "issue": null, "pr": null, "depends_on": ["audit-1a-1"], "last_run": null, "cost_usd": null, "error": null }
+        { "id": "audit-1a-1", "plan": "workspace-audit-apr7-13", "action": "commit simplify removal branch", "status": "done", "issue": null, "pr": 119, "depends_on": [], "last_run": "2026-04-14T00:00:00Z", "cost_usd": null, "error": null },
+        { "id": "audit-1a-2", "plan": "workspace-audit-apr7-13", "action": "merge PR #117 statusline path fix", "status": "done", "issue": null, "pr": 117, "depends_on": [], "last_run": "2026-04-14T00:00:00Z", "cost_usd": null, "error": null },
+        { "id": "audit-1a-3", "plan": "workspace-audit-apr7-13", "action": "delete stale feat/rag-core branch", "status": "done", "issue": null, "pr": null, "depends_on": ["audit-1a-1"], "last_run": "2026-04-14T00:00:00Z", "cost_usd": null, "error": null },
+        { "id": "audit-1a-4", "plan": "workspace-audit-apr7-13", "action": "drop 7 stale stash entries", "status": "skipped", "issue": null, "pr": null, "depends_on": ["audit-1a-1"], "last_run": "2026-04-14T00:00:00Z", "cost_usd": null, "error": "local-only operation, not verifiable via GitHub API" }
       ]
     },
-    "polyforge-orchestrator": {
+    "qte77/polyforge-orchestrator": {
       "tasks": [
         { "id": "audit-1b-1", "plan": "workspace-audit-apr7-13", "action": "merge PR #33 portable workspace refactor", "status": "pending", "issue": null, "pr": 33, "depends_on": [], "last_run": null, "cost_usd": null, "error": null },
         { "id": "audit-1b-2", "plan": "workspace-audit-apr7-13", "action": "rebase + merge PR #34 contrib infra", "status": "pending", "issue": null, "pr": 34, "depends_on": ["audit-1b-1"], "last_run": null, "cost_usd": null, "error": null },
@@ -69,41 +69,41 @@
         { "id": "audit-1b-4", "plan": "workspace-audit-apr7-13", "action": "create learnings-ralphy + research-ralphy repos, merge PR #35", "status": "pending", "issue": null, "pr": 35, "depends_on": ["audit-1b-1", "audit-1b-2"], "last_run": null, "cost_usd": null, "error": null }
       ]
     },
-    "ai-agents-research": {
+    "qte77/ai-agents-research": {
       "tasks": [
-        { "id": "audit-1c-1", "plan": "workspace-audit-apr7-13", "action": "merge docs/url-triage-batch-analysis to main", "status": "pending", "issue": null, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null },
+        { "id": "audit-1c-1", "plan": "workspace-audit-apr7-13", "action": "merge docs/url-triage-batch-analysis to main", "status": "done", "issue": null, "pr": 95, "depends_on": [], "last_run": "2026-04-14T00:00:00Z", "cost_usd": null, "error": null },
         { "id": "audit-1c-2", "plan": "workspace-audit-apr7-13", "action": "resolve 55 lychee redirects", "status": "pending", "issue": 106, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null }
       ]
     },
-    "so101-biolab-automation": {
+    "qte77/so101-biolab-automation": {
       "tasks": [
-        { "id": "audit-1d-1", "plan": "workspace-audit-apr7-13", "action": "delete merged branches", "status": "pending", "issue": null, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null }
+        { "id": "audit-1d-1", "plan": "workspace-audit-apr7-13", "action": "delete merged branches", "status": "done", "issue": null, "pr": null, "depends_on": [], "last_run": "2026-04-14T00:00:00Z", "cost_usd": null, "error": null }
       ]
     },
-    "TheBulletproofProtocol": {
+    "pat-tax/RDI-AgentBeats-TheBulletproofProtocol": {
       "tasks": [
         { "id": "rdi-a2-1", "plan": "rdi-agentbeats", "action": "register agents on agentbeats.dev", "status": "pending", "issue": null, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null },
         { "id": "rdi-a2-2", "plan": "rdi-agentbeats", "action": "fix BUG-001 evaluator threshold", "status": "pending", "issue": null, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null },
         { "id": "rdi-a2-3", "plan": "rdi-agentbeats", "action": "fix BUG-002 on_message_send return type", "status": "pending", "issue": null, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null }
       ]
     },
-    "MAS-GraphJudge": {
+    "qte77/RDI-AgentBeats-MAS-GraphJudge": {
       "tasks": [
         { "id": "rdi-a3-1", "plan": "rdi-agentbeats", "action": "fix scenario.toml duplicate IDs + missing names", "status": "pending", "issue": null, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null }
       ]
     },
-    "TestBehaveAlign": {
+    "qte77/RDI-AgentBeats-TestBehaveAlign": {
       "tasks": [
         { "id": "rdi-a4-1", "plan": "rdi-agentbeats", "action": "build purple baseline STORY-001 through STORY-006", "status": "pending", "issue": null, "pr": null, "depends_on": [], "last_run": null, "cost_usd": null, "error": null }
       ]
     }
   },
   "totals": {
-    "pending": 16,
+    "pending": 10,
     "running": 0,
-    "done": 0,
+    "done": 5,
     "failed": 0,
-    "skipped": 0,
+    "skipped": 1,
     "cost_usd": 0
   }
 }
