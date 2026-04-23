@@ -24,7 +24,7 @@ set `GH_PAT` as Codespace secret.
 <details>
   <summary>Workspace preview — multi-repo IDE layout with parallel terminals</summary>
   <img alt="polyforge-orchestrator workspace"
-    src="assets/images/polyforge.svg"
+    src="assets/images/polyforge_screenshot.png"
     width="100%">
 </details>
 
