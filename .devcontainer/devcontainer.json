@@ -40,5 +40,5 @@
     "RTK_TELEMETRY_DISABLED": "1"
   },
   "onCreateCommand": "make setup_all",
-  "postAttachCommand": "make setup_repos"
+  "postAttachCommand": "make setup_repos generate_tasks"
 }
